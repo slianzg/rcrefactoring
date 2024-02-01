@@ -15,7 +15,7 @@
     - **JWT**(AccessToken)의 이해
     - 회원가입 API, 로그인 API, 내 정보 조회 API, 인증 **Middleware** 구현
     - 상품 관련 기능에 인증 로직 추가
-  
+---  
 <aside>
 
   🛠 **기술 스택**
@@ -40,7 +40,7 @@ ES6 부터 도입 된 모듈 시스템(**ESModule, type: "module"**)을 이용�
 직접 설치하지 않고, Cloud 서비스인 **AWS RDS**를 이용합니다.
 5. **ORM(Object Relational Mapping)
 MySQL**의 데이터를 쉽게 읽고 쓰게 해주는 **[Prisma](https://www.prisma.io/)를 사용합니다.**
-
+---
 
 
 # 환경변수
