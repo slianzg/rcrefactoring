@@ -25,104 +25,118 @@ router.post('/resumes', authMiddleware, async (req, res, next) => {
 
 //모든 이력서 조회 API
 router.get('/resumes', async (req, res, next) => {
-  const resumes = await prisma.resumes.findMany({
-    select: {
-      resumeId: true,
-      title: true,
-      content: true,
-      user: {
-        select: {
-          name: true,
+  try {
+    const resumes = await prisma.resumes.findMany({
+      select: {
+        resumeId: true,
+        title: true,
+        content: true,
+        user: {
+          select: {
+            name: true,
+          },
         },
+        status: true,
+        createdAt: true,
       },
-      status: true,
-      createdAt: true,
-    },
-    orderBy: { createdAt: 'desc' }, // querystring????
-  });
-  return res.status(200).json({ data: resumes });
+      orderBy: { createdAt: 'desc' }, // querystring????
+    });
+    return res.status(200).json({ data: resumes });
+  } catch (err) {
+    next(err);
+  }
 });
 
 //이력서 세부 조회 API
 router.get('/resumes/:resumeId', async (req, res, next) => {
-  const { resumeId } = req.params;
+  try {
+    const { resumeId } = req.params;
 
-  const resume = await prisma.resumes.findFirst({
-    where: { resumeId: +resumeId },
-    select: {
-      resumeId: true,
-      title: true,
-      content: true,
-      user: {
-        select: {
-          name: true,
+    const resume = await prisma.resumes.findFirst({
+      where: { resumeId: +resumeId },
+      select: {
+        resumeId: true,
+        title: true,
+        content: true,
+        user: {
+          select: {
+            name: true,
+          },
         },
+        status: true,
+        createdAt: true,
       },
-      status: true,
-      createdAt: true,
-    },
-  });
+    });
 
-  if (!resume) {
-    res.status(404).json({message: '이력서 조회에 실패하였습니다.'})
+    if (!resume) {
+      res.status(404).json({ message: '이력서 조회에 실패하였습니다.' });
+    }
+
+    return res.status(200).json({ data: resume });
+  } catch (err) {
+    next(err);
   }
-
-  return res.status(200).json({ data: resume });
 });
 
 //이력서 수정 API
 router.patch('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
-  const { resumeId } = req.params;
-  const { userId } = req.user;
+  try {
+    const { resumeId } = req.params;
+    const { userId } = req.user;
 
-  const { title, content, status } = req.body;
+    const { title, content, status } = req.body;
 
-  const resume = await prisma.resumes.findFirst({
-    where: { resumeId: +resumeId },
-  });
-  if (!resume) {
+    const resume = await prisma.resumes.findFirst({
+      where: { resumeId: +resumeId },
+    });
+    if (!resume) {
+      return res.status(404).json({ message: '이력서 조회에 실패하였습니다.' });
+    }
+    if (userId !== resume.userId) {
+      return res
+        .status(401)
+        .json({ message: '이력서를 수정할 권한이 없습니다.' });
+    }
+
+    await prisma.resumes.update({
+      data: { title, content, status },
+      where: { resumeId: +resumeId },
+    });
+
     return res
-      .status(404)
-      .json({ message: '이력서 조회에 실패하였습니다.' });
+      .status(200)
+      .json({ message: '이력서 수정사항이 저장되었습니다.' });
+  } catch (err) {
+    next(err);
   }
-  if (userId !== resume.userId) {
-    return res
-      .status(401)
-      .json({ message: '이력서를 수정할 권한이 없습니다.' });
-  }
-
-  await prisma.resumes.update({
-    data: { title, content, status },
-    where: { resumeId: +resumeId },
-  });
-
-  return res.status(200).json({ message: '이력서 수정사항이 저장되었습니다.' });
 });
 
 //이력서 삭제 API
 router.delete('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
-  const { resumeId } = req.params;
-  const { userId } = req.user;
+  try {
+    const { resumeId } = req.params;
+    const { userId } = req.user;
 
-  const resume = await prisma.resumes.findFirst({
-    where: { resumeId: +resumeId },
-  });
-  if (!resume) {
-    return res
-      .status(404)
-      .json({ message: '이력서 조회에 실패하였습니다.' });
+    const resume = await prisma.resumes.findFirst({
+      where: { resumeId: +resumeId },
+    });
+    if (!resume) {
+      return res.status(404).json({ message: '이력서 조회에 실패하였습니다.' });
+    }
+    if (userId !== resume.userId) {
+      return res
+        .status(401)
+        .json({ message: '이력서를 삭제할 권한이 없습니다.' });
+    }
+
+    await prisma.resumes.delete({
+      where: { resumeId: +resumeId },
+    });
+
+    return res.status(200).json({ message: '이력서가 삭제되었습니다.' });
+  } catch (err) {
+    next(err);
   }
-  if (userId !== resume.userId) {
-    return res
-      .status(401)
-      .json({ message: '이력서를 삭제할 권한이 없습니다.' });
-  }
-
-  await prisma.resumes.delete({
-    where: { resumeId: +resumeId },
-  });
-
-  return res.status(200).json({ message: '이력서가 삭제되었습니다.' });
 });
 
 export default router;
