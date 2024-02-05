@@ -8,9 +8,8 @@ export default async function (req, res, next) {
   try {
     const { authorization } = req.cookies;
     if (!authorization) {
-        res.status(401).json({ message: '로그인이 필요합니다.' });
+      res.status(401).json({ message: '로그인이 필요합니다.' });
     }
-    
 
     const [tokenType, token] = authorization.split(' ');
     if (tokenType !== 'Bearer') throw new Error('토큰 타입이 다릅니다.');
