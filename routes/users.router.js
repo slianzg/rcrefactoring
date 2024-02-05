@@ -14,6 +14,26 @@ router.post('/sign-up', async (req, res, next) => {
   try {
     const { email, password, confirmPassword, name } = req.body;
 
+    if (!email) {
+      return res.status(400).json({ message: '이메일이 입력되지 않았습니다.' });
+    }
+
+    if (!password) {
+      return res
+        .status(400)
+        .json({ message: '비밀번호가 입력되지 않았습니다.' });
+    }
+
+    if (!confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: '비밀번호확인이 입력되지 않았습니다.' });
+    }
+
+    if (!name) {
+      return res.status(400).json({ message: '이름이 입력되지 않았습니다.' });
+    }
+
     const isExistUser = await prisma.users.findFirst({
       where: { email },
     });
@@ -66,6 +86,22 @@ router.post('/sign-in', async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (!req.body) {
+      return res
+        .status(400)
+        .json({ message: '이메일과 비밀번호를 입력해주세요.' });
+    }
+
+    if (!email) {
+      return res.status(400).json({ message: '이메일이 입력되지 않았습니다.' });
+    }
+
+    if (!password) {
+      return res
+        .status(400)
+        .json({ message: '비밀번호가 입력되지 않았습니다.' });
+    }
+
     const user = await prisma.users.findFirst({ where: { email } });
 
     if (!user) {
@@ -108,7 +144,7 @@ router.get('/users', authMiddleware, async (req, res, next) => {
     });
     return res.status(200).json({ data: user });
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 });
 
