@@ -121,12 +121,15 @@ router.post('/sign-in', async (req, res, next) => {
     const token = jwt.sign(
       { userId: user.userId },
       process.env.TOKEN_SECRET_KEY,
-      {
-        expiresIn: '12h',
-      }
+      { expiresIn: '12h' }
     );
-
+    const newRefreshToken = jwt.sign(
+      { userId: user.userId },
+      process.env.REFRESH_TOKEN_KEY,
+      { expiresIn: '7d' }
+    );
     res.cookie('authorization', `Bearer ${token}`);
+    res.cookie('refreshtoken', newRefreshToken);
     return res.status(200).json({ message: '로그인 성공!' });
   } catch (err) {
     next(err);
