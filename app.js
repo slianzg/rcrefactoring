@@ -13,7 +13,7 @@ app.use(logMiddleware);
 
 app.use(express.json());
 app.use(cookieParser());
-app.use('/auth', AuthRouter);
+app.use('/auth', [AuthRouter]);
 app.use('/api', [UsersRouter, ResumesRouter]);
 
 app.use(ErrorHandlingMiddleware);

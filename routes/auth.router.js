@@ -13,12 +13,12 @@ router.post('/token', async (req, res, next) => {
 
     const token = jwt.verify(refreshtoken, process.env.REFRESH_TOKEN_KEY);
     if (!token.userId) {
-      return res.status(401).end();
+      return res.status(401).json({ message: '유효하지 않은 token입니다.' });
     }
 
     //refresh토큰이 유효할 시
     const user = await prisma.users.findFirst({
-      userId: token.userId,
+      where: { userId: token.userId },
     });
     if (!user) {
       return res.status(401).end();
@@ -38,10 +38,7 @@ router.post('/token', async (req, res, next) => {
     res.cookie('authorization', `Bearer ${newAccessToken}`);
     res.cookie('refreshtoken', newRefreshToken);
 
-    return res.json({
-      accesstoken: newAccessToken,
-      refreshtoken: newRefreshToken,
-    });
+    return res.status(200).json({ message: 'token이 갱신되었습니다.' });
   } catch (err) {
     next(err);
   }
