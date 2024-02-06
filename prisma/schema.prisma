@@ -17,6 +17,7 @@ model Users {
   name      String   @map("name")
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt @map("updatedAt")
+  grade     Grade    @default(NORMAL) @map("grade")
 
   resumes Resumes[]
 
@@ -44,4 +45,9 @@ enum Status {
   INTERVIEW1
   INTERVIEW2
   FINAL_PASS
+}
+
+enum Grade {
+  NORMAL
+  ADMIN
 }

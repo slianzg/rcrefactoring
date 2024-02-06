@@ -123,7 +123,7 @@ router.get('/resumes/:resumeId', async (req, res, next) => {
 router.patch('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
   try {
     const { resumeId } = req.params;
-    const { userId } = req.user;
+    const user = req.user;
 
     if (!resumeId) {
       return res
@@ -139,7 +139,7 @@ router.patch('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
     if (!resume) {
       return res.status(404).json({ message: '이력서 조회에 실패하였습니다.' });
     }
-    if (userId !== resume.userId) {
+    if (user.grade === 'NORMAL' && user.userId !== resume.userId) {
       return res
         .status(401)
         .json({ message: '이력서를 수정할 권한이 없습니다.' });
@@ -175,7 +175,7 @@ router.patch('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
 router.delete('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
   try {
     const { resumeId } = req.params;
-    const { userId } = req.user;
+    const user = req.user;
 
     const resume = await prisma.resumes.findFirst({
       where: { resumeId: +resumeId },
@@ -183,7 +183,7 @@ router.delete('/resumes/:resumeId', authMiddleware, async (req, res, next) => {
     if (!resume) {
       return res.status(404).json({ message: '이력서 조회에 실패하였습니다.' });
     }
-    if (userId !== resume.userId) {
+    if (user.grade === 'NORMAL' && user.userId !== resume.userId) {
       return res
         .status(401)
         .json({ message: '이력서를 삭제할 권한이 없습니다.' });

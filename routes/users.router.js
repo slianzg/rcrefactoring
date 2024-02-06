@@ -12,7 +12,7 @@ dotenv.config();
 //회원가입 API
 router.post('/sign-up', async (req, res, next) => {
   try {
-    const { email, password, confirmPassword, name } = req.body;
+    const { email, password, confirmPassword, name, grade } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: '이메일이 입력되지 않았습니다.' });
@@ -32,6 +32,12 @@ router.post('/sign-up', async (req, res, next) => {
 
     if (!name) {
       return res.status(400).json({ message: '이름이 입력되지 않았습니다.' });
+    }
+
+    if (grade && !['NORMAL', 'ADMIN'].includes(grade)) {
+      return res
+        .status(400)
+        .json({ message: '회원등급 입력이 올바르지 않습니다.' });
     }
 
     const isExistUser = await prisma.users.findFirst({
@@ -59,7 +65,7 @@ router.post('/sign-up', async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.users.create({
-      data: { email, password: hashedPassword, name },
+      data: { email, password: hashedPassword, name, grade },
     });
 
     const userInfo = await prisma.users.findFirst({
@@ -68,8 +74,7 @@ router.post('/sign-up', async (req, res, next) => {
         userId: true,
         email: true,
         name: true,
-        createdAt: true,
-        updatedAt: true,
+        grade: true,
       },
     });
 
@@ -138,6 +143,7 @@ router.get('/users', authMiddleware, async (req, res, next) => {
         userId: true,
         email: true,
         name: true,
+        grade: true,
         createdAt: true,
         updatedAt: true,
       },
