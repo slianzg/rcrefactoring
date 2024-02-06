@@ -48,7 +48,7 @@ MySQL**의 데이터를 쉽게 읽고 쓰게 해주는 **[Prisma](https://www.pr
 - TOKEN_SECRET_KEY
 
 # API 명세서 URL
-- https://www.notion.so/32b4ffbe765d40378bb236b50e26b435?v=468c3b22518448c68f1e215589e2ba7e&pvs=4
+- https://legend-maxilla-125.notion.site/Node-js-API-96c2d59f2e6048a78faa2159282f0fe5?pvs=4
 
 # ERD URL
 - https://www.erdcloud.com/d/RGJKnRJgrCLsiG8XT
@@ -60,7 +60,7 @@ MySQL**의 데이터를 쉽게 읽고 쓰게 해주는 **[Prisma](https://www.pr
     => 단방향입니다.
     - 비밀번호를 그냥 저장하지 않고 Hash 한 값을 저장 했을 때의 좋은 점은 무엇인가요?
  
-    => 보안이 강력해집니다.
+    => hash한 비밀번호의 문자열을 받아도, 원래 비밀번호가 무엇인지 복호화할 수 없어서 보안에 강합니다.
 
 2. **인증 방식**
     - JWT(Json Web Token)을 이용해 인증 기능을 했는데, 만약 Access Token이 노출되었을 경우 발생할 수 있는 문제점은 무엇일까요?
@@ -68,7 +68,7 @@ MySQL**의 데이터를 쉽게 읽고 쓰게 해주는 **[Prisma](https://www.pr
     => 해킹을 당해서, 결제정보나 개인정보등 피해를 입을 수 있습니다.
     - 해당 문제점을 보완하기 위한 방법으로는 어떤 것이 있을까요?
 
-    => 세션을 사용하는 방법도 있습니다.
+    => Token의 유효기간을 줄여서 수시로 token을 새로 받도록 하거나, 세션을 사용하는 방법도 있습니다.
 
 3. **인증과 인가**
     - 인증과 인가가 무엇인지 각각 설명해 주세요.
