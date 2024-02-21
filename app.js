@@ -5,11 +5,14 @@ import UsersRouter from './routes/users.router.js';
 import ResumesRouter from './routes/resumes.router.js';
 import AuthRouter from './routes/auth.router.js';
 import ErrorHandlingMiddleware from './middlewares/error-handling,middleware.js';
+import dotenv from 'dotenv';
 
 const app = express();
 const PORT = 3018;
 
 app.use(logMiddleware);
+
+dotenv.config();
 
 app.use(express.json());
 app.use(cookieParser());
