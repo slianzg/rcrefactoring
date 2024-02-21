@@ -3,6 +3,7 @@ import { prisma } from '../utils/prisma/index.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import authMiddleware from '../middlewares/auth.middleware.js';
+// import { UsersController } from '../controllers/users.constroller.js';
 import dotenv from 'dotenv';
 
 const router = express.Router();
@@ -85,8 +86,8 @@ router.post('/sign-up', async (req, res, next) => {
     next(err);
   }
 });
-
-//로그인 API
+// router.post('/sign-up', UsersController.SignUp);
+// 로그인 API
 router.post('/sign-in', async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -135,7 +136,7 @@ router.post('/sign-in', async (req, res, next) => {
     next(err);
   }
 });
-
+// router.post('/sign-in', UsersController.SignIn);
 //로그인 유저 정보 조회 API
 router.get('/users', authMiddleware, async (req, res, next) => {
   try {
@@ -156,5 +157,6 @@ router.get('/users', authMiddleware, async (req, res, next) => {
     console.log(err);
   }
 });
+// router.get('/users', authMiddleware, UsersController.getUserInfoById);
 
 export default router;
