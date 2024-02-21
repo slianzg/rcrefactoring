@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 
 const router = express.Router();
 dotenv.config();
+const usersController = new UsersController();
 
 //회원가입 API
 // router.post('/sign-up', async (req, res, next) => {
@@ -85,7 +86,7 @@ dotenv.config();
 //     next(err);
 //   }
 // });
-router.post('/sign-up', UsersController.signUp);
+router.post('/sign-up', usersController.signUp);
 // 로그인 API
 // router.post('/sign-in', async (req, res, next) => {
 //   try {
@@ -135,7 +136,7 @@ router.post('/sign-up', UsersController.signUp);
 //     next(err);
 //   }
 // });
-router.post('/sign-in', UsersController.signIn);
+router.post('/sign-in', usersController.signIn);
 //로그인 유저 정보 조회 API
 // router.get('/users', authMiddleware, async (req, res, next) => {
 //   try {
@@ -156,6 +157,6 @@ router.post('/sign-in', UsersController.signIn);
 //     console.log(err);
 //   }
 // });
-router.get('/users', authMiddleware, UsersController.getUserInfoById);
+router.get('/users', authMiddleware, usersController.getUserInfoById);
 
 export default router;
