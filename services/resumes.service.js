@@ -1,7 +1,7 @@
-import { ResumesRepository } from '../repositories/resumes.repository.js';
-
 export class ResumesService {
-  resumesRepository = new ResumesRepository();
+  constructor(resumesRepository) {
+    this.resumesRepository = resumesRepository;
+  }
 
   //이력서 생성
   createResume = async (title, content, userId) => {

@@ -1,7 +1,7 @@
-import { ResumesService } from '../services/resumes.service.js';
-
 export class ResumesController {
-  resumesService = new ResumesService();
+  constructor(resumesService) {
+    this.resumesService = resumesService;
+  }
 
   //이력서 생성
   createResume = async (req, res, next) => {

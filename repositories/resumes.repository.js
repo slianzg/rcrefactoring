@@ -1,15 +1,17 @@
-import { prisma } from '../utils/prisma/index.js';
-
 export class ResumesRepository {
+  constructor(prisma) {
+    this.prisma = prisma;
+  }
+
   createResume = async (title, content, userId) => {
-    await prisma.resumes.create({
+    await this.prisma.resumes.create({
       data: { title, content, userId: +userId },
     });
     return;
   };
 
   getAllResumes = async (orderKey, orderValue) => {
-    const resumes = await prisma.resumes.findMany({
+    const resumes = await this.prisma.resumes.findMany({
       select: {
         resumeId: true,
         userId: true,
@@ -26,7 +28,7 @@ export class ResumesRepository {
   };
 
   getResumeById = async (resumeId) => {
-    const resume = await prisma.resumes.findUnique({
+    const resume = await this.prisma.resumes.findUnique({
       where: { resumeId: +resumeId },
       select: {
         resumeId: true,
@@ -48,7 +50,7 @@ export class ResumesRepository {
   };
 
   updateResume = async (resumeId, title, content, status) => {
-    await prisma.resumes.update({
+    await this.prisma.resumes.update({
       where: { resumeId: +resumeId },
       data: { title, content, status },
     });
@@ -56,7 +58,7 @@ export class ResumesRepository {
   };
 
   deleteResume = async (resumeId) => {
-    await prisma.resumes.delete({
+    await this.prisma.resumes.delete({
       where: { resumeId: +resumeId },
     });
     return;

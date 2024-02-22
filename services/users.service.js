@@ -1,8 +1,9 @@
-import { UsersRepository } from '../repositories/users.repository.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'; // 얘는 어떻게 하지
 
 export class UsersService {
-  usersRepository = new UsersRepository();
+  constructor(usersRepository) {
+    this.usersRepository = usersRepository;
+  }
 
   //회원가입
   signUp = async (email, password, name, grade) => {
