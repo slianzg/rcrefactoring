@@ -1,8 +1,9 @@
-import { UsersService } from '../services/users.service.js';
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'; //얘는 어떡하지...
 
 export class UsersController {
-  usersService = new UsersService();
+  constructor(usersService) {
+    this.usersService = usersService;
+  }
 
   //회원가입
   signUp = async (req, res, next) => {
